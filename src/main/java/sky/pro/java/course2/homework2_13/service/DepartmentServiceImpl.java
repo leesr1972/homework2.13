@@ -13,7 +13,9 @@ import java.util.stream.Collectors;
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 
-    private List<String> departments = new ArrayList<>(List.of("Руководство", "Бухгалтерия",
+    private EmployeeService employeeService = new EmployeeServiceImpl();
+
+    private final List<String> departments = new ArrayList<>(List.of("Руководство", "Бухгалтерия",
             "Отдел кадров", "Технический отдел"));
 
 
@@ -22,7 +24,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (departmentId < 0 || departmentId > departments.size() - 1) {
             throw new BadRequest();
         }
-        Optional<Employee> employeesWithMaxSalary = EmployeeServiceImpl.getStaffOfEmployee().values().stream().
+        Optional<Employee> employeesWithMaxSalary = employeeService.getStaffOfEmployee().values().stream().
                 filter(e -> e.getDepartmentId() == departmentId).
                 max(Comparator.comparingDouble(employee -> employee.getSalary()));
         return "В отделе " + departments.get(departmentId) + " самую высокую зарплату получает "
@@ -34,11 +36,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (departmentId < 0 || departmentId > departments.size() - 1) {
             throw new BadRequest();
         }
-        Optional<Employee> employeesWithMinSalary = EmployeeServiceImpl.getStaffOfEmployee().values().stream().
+        Optional<Employee> employeesWithMinSalary = employeeService.getStaffOfEmployee().values().stream().
                 filter(e -> e.getDepartmentId() == departmentId).
                 min(Comparator.comparingDouble(employee -> employee.getSalary()));
         return "В отделе " + departments.get(departmentId) + " самую низкую зарплату получает "
-                + employeesWithMinSalary.map(Employee::toString);
+                + employeesWithMinSalary.map(Employee::toString) + ".";
     }
 
     @Override
@@ -46,12 +48,12 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (departmentId < 0 || departmentId > departments.size() - 1) {
             throw new BadRequest();
         }
-        List<String> staffOfDepartment = EmployeeServiceImpl.getStaffOfEmployee().values().stream().
+        List<String> staffOfDepartment = employeeService.getStaffOfEmployee().values().stream().
                 filter(e -> e.getDepartmentId() == departmentId).
                 map(employee -> employee.getLastName() + " " + employee.getFirstName()).
                 collect(Collectors.toList());
         return "В отделе " + departments.get(departmentId) + " работают следующие сотрудники: "
-                + staffOfDepartment + ". ";
+                + staffOfDepartment + ".";
     }
 
     @Override
