@@ -25,7 +25,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     ));
 
     @Override
-    public Employee findEmloyee(String lastName, String firstName) {
+    public Employee findEmployee(String lastName, String firstName) {
         Employee employee = staffOfEmployee.get(lastName + firstName);
         if (staffOfEmployee.containsKey(lastName + firstName)) {
             return employee;
@@ -64,7 +64,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<String> allStaff = staffOfEmployee.values().stream().
                 map(employee -> employee.getLastName() + " " + employee.getFirstName()).
                 collect(Collectors.toList());
-        return "Список сотрудников:" + allStaff;
+        return "Список сотрудников: " + allStaff;
     }
 
     @Override
@@ -76,7 +76,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         return "Фонд оплаты труда составляет " + wageFund + " руб.";
     }
 
-    public static Map<String, Employee> getStaffOfEmployee() {
+    @Override
+    public Map<String, Employee> getStaffOfEmployee() {
         return staffOfEmployee;
     }
 }
